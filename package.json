@@ -1,0 +1,49 @@
+{
+  "name": "coject_temp_js",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "homepage": "/",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build --base=/",
+    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview",
+    "debug": "set BROWSER=none&&set HTTPS=true&&set SSL_CRT_FILE=c:\\cert\\fullchain.pem&&set SSL_KEY_FILE=c:\\cert\\privkey.pem&&set PORT=$PORT_NUMBER$&&vite --host aseer.aait.com.sa --port $PORT_NUMBER$",
+    "http": "set BROWSER=none&&set HTTPS=false&&set PORT=$PORT_NUMBER$&&vite --host aseer.aait.com.sa --port $PORT_NUMBER$"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@mui/icons-material": "^5.15.19",
+    "@mui/material": "^5.15.19",
+    "@mui/system": "^6.1.8",
+    "@mui/x-data-grid": "^7.6.1",
+    "@mui/x-date-pickers": "^7.6.1",
+    "axios": "^1.6.8",
+    "coject": "^2.3.10",
+    "coject-hijri": "^1.9.0",
+    "i18next": "^23.11.2",
+    "moment": "^2.30.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-hook-form": "^7.51.3",
+    "react-i18next": "^14.1.1",
+    "react-router-dom": "^6.23.0",
+    "react-toastify": "^10.0.5",
+    "stylis": "^4.3.2",
+    "stylis-plugin-rtl": "^2.1.1",
+    "tss-react": "^4.9.7"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.1",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react-swc": "^3.5.0",
+    "eslint": "^8.0.0",
+    "eslint-plugin-react": "^7.34.1",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "eslint-plugin-react-refresh": "^0.4.6",
+    "vite": "^5.2.12"
+  },
+  "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610"
+}

@@ -1,0 +1,9 @@
+{
+    "PAGE": [
+        {
+            "NAME": "Test",
+            "REACT_PATH": "../../Layouts/Test/Test.jsx",
+            "PATH": "Test"
+        }
+    ]
+}

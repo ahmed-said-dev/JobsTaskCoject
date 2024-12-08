@@ -1,0 +1,12 @@
+{
+    "MODULE": [
+        {
+            "MODULE_ID": 1,
+            "NAME": "Global"
+        },
+        {
+            "MODULE_ID": 1,
+            "NAME": "HRMS"
+        }
+    ]
+}
