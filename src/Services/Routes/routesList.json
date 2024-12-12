@@ -4,6 +4,11 @@
             "NAME": "Test",
             "REACT_PATH": "../../Layouts/Test/Test.jsx",
             "PATH": "Test"
+        },
+        {
+            "NAME": "JobApplication",
+            "REACT_PATH": "../../Layouts/Pages/Employment/JobApplication/JobApplicationPage.jsx",
+            "PATH": "employment/job-application"
         }
     ]
 }

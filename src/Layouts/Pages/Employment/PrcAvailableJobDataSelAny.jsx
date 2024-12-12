@@ -1,30 +1,34 @@
 import React, { useEffect, useState } from 'react';
-import {  Grid, Page } from 'coject';
+import {  Grid, Page, Request } from 'coject';
 import { Box, Paper } from '@mui/material';
 import { useStyles } from 'tss-react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom'; // Add this import
+import { useNavigate } from 'react-router-dom';
 
 const PrcAvailableJobDataSelAny = () => {
   const [jobs, setJobs] = useState([]);
   const { classes } = useStyles();
   const { t } = useTranslation(['HRMS']);
-  const navigate = useNavigate(); // Add this hook
+  const navigate = useNavigate();
 
-  const gridDataSource = {
-    dataPath: "DATA.REF_ID",
-    apiUrl: "/PrcAvailableJobDataSelAny",
-    baseUrl: "https://aseer.aait.com.sa:4801/API/C279486795214703A93A3DC417DB35E1/Hrms/Custom",
-    requestConfig: {
-      headers: {
-        'Accept': 'application/json, text/plain, */*',
-        'Content-Type': 'application/x-www-form-urlencoded'
+  // const gridDataSource = 
+
+  useEffect(() => {
+    Request({
+      dataSource: {
+        method: 'post',
+        dataPath: 'DATA.REF_ID',
+        apiUrl: '/PrcAvailableJobDataSelAny',
+        baseUrl: "https://aseer.aait.com.sa:4801/API/C279486795214703A93A3DC417DB35E1/Hrms/Custom",
+  
       },
-      transformRequest: [(data) => {
-        return data;
-      }]
-    }
-  }
+      data: {  TOKEN: '902DBEAE47DE4EB2A471AA338165B66D' },
+      callback: (data) => {
+        setJobs(data);
+      },
+    }).then();
+    
+  }, []);
 
   const gridColumns = [
     { field: 'WORKPLACE', headerName: "Workplace", flex: 1 },
@@ -36,30 +40,45 @@ const PrcAvailableJobDataSelAny = () => {
     { field: 'ACADEMIC_QUALIFICATION_NAME', headerName: "Academic Qualification Name", flex: 1 },
   ];
 
-  const handleApplyJob = (_, data) => {
-    console.log(data);
+  const handleApplyJob = (rowData) => {
+    console.log(rowData);
     
-    navigate(`/job-application/${data.AVAILABLE_JOB_ID}`, { state: { jobData: data } });
+    // Only pass the necessary data
+    const jobData = {
+      jobTitle: rowData.IS_ACTIVE_Y_N,
+      workplace: rowData.WORKPLACE,
+      skillName: rowData.SKILL_NAME,
+      experienceName: rowData.EXPERIENCE_NAME,
+      academicQualification: rowData.ACADEMIC_QUALIFICATION_NAME
+    };
+
+    // Navigate to the job application page with minimal job data
+    navigate('/employment/job-application', { 
+      state: jobData
+    });
   };
+
+  console.log(jobs);
+  
  
   return (
     <Page title={"Available Job Data"}>
       <Box className={classes.root}>
         <Paper elevation={1} sx={{ p: 2 }}>
           <Grid
-            dataSource={gridDataSource}
+            staticData={jobs}
             schema={gridColumns}
             customKey="ACADEMIC_QUALIFICATION_NAME"
             customActions={[
             {
               icon: "RemoveRedEye", 
               label: "عرض الوظيفة", 
-              onClick: handleApplyJob
+              onClick: (row) => handleApplyJob(row)
             },
             {
               icon: "AppRegistration", 
               label: "Apply", 
-              onClick: handleApplyJob
+              onClick: (row) => handleApplyJob(row)
             },
           ]}
           />
