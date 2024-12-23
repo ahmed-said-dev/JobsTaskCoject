@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Grid, FormControl, Select, MenuItem, Chip, Box } from '@mui/material';
-import { Request } from 'coject';
+import { Grid } from '@mui/material';
+import { Request, Select, Form } from 'coject';
 
 export default function SkillsTab({ onUpdate, initialData }) {
   const [skills, setSkills] = useState([]);
@@ -16,49 +16,35 @@ export default function SkillsTab({ onUpdate, initialData }) {
       },
       data: { TOKEN: '902DBEAE47DE4EB2A471AA338165B66D' },
       callback: (data) => {
-        console.log('Skills Data:', data);
         setSkills(data);
       },
     }).then();
   }, []);
 
-  useEffect(() => {
-    onUpdate?.({ selectedSkills });
-  }, [selectedSkills, onUpdate]);
-
-  const handleChange = (event) => {
-    const { value } = event.target;
-    setSelectedSkills(value);
+  const handleChange = (_,value) => {
+    const formattedData = value.map(item => ( item.SKILL_ID ));
+    setSelectedSkills(formattedData);
   };
 
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
-        <FormControl fullWidth>
+        <Form>
           <Select
+            name="skills"
+            label="المهارات"
             multiple
             value={selectedSkills}
             onChange={handleChange}
-            displayEmpty
-            renderValue={(selected) => (
-              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                {selected.length === 0 ? (
-                  <span>اختر المهارات</span>
-                ) : (
-                  selected.map((value) => (
-                    <Chip key={value} label={value} />
-                  ))
-                )}
-              </Box>
-            )}
-          >
-            {skills.map((skill) => (
-              <MenuItem key={skill.SKILL_ID} value={skill.SKILL_NAME}>
-                {skill.SKILL_NAME}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+            validation={{ required: '' }}
+            variant="outlined"
+            fullWidth
+            staticData={skills}
+            placeholder="اختر المهارات"
+            customKey='SKILL_ID'
+            customName='SKILL_NAME'
+          />
+        </Form>
       </Grid>
     </Grid>
   );

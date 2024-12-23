@@ -45,7 +45,7 @@ const PrcAvailableJobDataSelAny = () => {
     
     // Only pass the necessary data
     const jobData = {
-      jobTitle: rowData.IS_ACTIVE_Y_N,
+      jobTitle: rowData.JOB_DESCRIPTION,
       workplace: rowData.WORKPLACE,
       skillName: rowData.SKILL_NAME,
       experienceName: rowData.EXPERIENCE_NAME,
@@ -78,7 +78,7 @@ const PrcAvailableJobDataSelAny = () => {
             {
               icon: "AppRegistration", 
               label: "Apply", 
-              onClick: (row) => handleApplyJob(row)
+              onClick: (_,row) => handleApplyJob(row)
             },
           ]}
           />

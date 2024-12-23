@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Grid, TextField, Box, Typography, Select, MenuItem, FormControl } from '@mui/material';
+import { Grid, Box, Typography } from '@mui/material';
 import { makeStyles } from 'tss-react/mui';
-import { Request } from 'coject';
+import { Request, Input, Select, Form, DatePicker } from 'coject';
 
 const useStyles = makeStyles()((theme) => ({
   inputLabel: {
@@ -9,31 +9,6 @@ const useStyles = makeStyles()((theme) => ({
     marginBottom: theme.spacing(1),
     fontWeight: 500,
     fontSize: '0.875rem'
-  },
-  textField: {
-    '& .MuiOutlinedInput-root': {
-      backgroundColor: '#fff',
-      borderRadius: '8px',
-      '& fieldset': {
-        borderColor: '#E0E0E0',
-      },
-      '&:hover fieldset': {
-        borderColor: theme.palette.primary.main,
-      },
-    },
-  },
-  select: {
-    backgroundColor: '#fff',
-    borderRadius: '8px',
-    borderColor: '#E0E0E0',
-
-    '& .MuiOutlinedInput-root': {
-      backgroundColor: '#E0E0E0',
-    }
-  },
-  inputIcon: {
-    color: theme.palette.text.secondary,
-    marginRight: theme.spacing(1),
   }
 }));
 
@@ -41,15 +16,8 @@ export default function PersonalInfoTab({ onUpdate, initialData = {} }) {
   const { classes } = useStyles();
   const [genderData, setGenderData] = useState([]);
   const [healthStatusData, setHealthStatusData] = useState([]);
-  const [formData, setFormData] = useState({
-    fullName: initialData.fullName || '',
-    birthDate: initialData.birthDate || '',
-    idNumber: initialData.idNumber || '',
-    mobile: initialData.mobile || '',
-    email: initialData.email || '',
-    gender: initialData.gender || '',
-    healthStatus: initialData.healthStatus || ''
-  });
+  console.log(genderData);
+  
 
   useEffect(() => {
     Request({
@@ -61,7 +29,6 @@ export default function PersonalInfoTab({ onUpdate, initialData = {} }) {
       },
       data: { TOKEN: '902DBEAE47DE4EB2A471AA338165B66D' },
       callback: (data) => {
-        console.log('Gender Data:', data);
         setGenderData(data);
       },
     }).then();
@@ -75,142 +42,127 @@ export default function PersonalInfoTab({ onUpdate, initialData = {} }) {
       },
       data: { TOKEN: '902DBEAE47DE4EB2A471AA338165B66D' },
       callback: (data) => {
-        console.log('Health Status Data:', data);
         setHealthStatusData(data);
       },
     }).then();
   }, []);
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setFormData(prev => {
-      const newData = { ...prev, [name]: value };
-      onUpdate?.(newData);
-      return newData;
-    });
+  const handleChange = (values) => {
+    onUpdate?.(values);
   };
 
   return (
-    <Box sx={{ p: 2, bgcolor: '#F5F7FF', borderRadius: 2 }}>
-      <Grid container spacing={3}>
-        <Grid item xs={12}>
-          <Typography className={classes.inputLabel}>
-            الاسم رباعي
-          </Typography>
-          <TextField
-            name="fullName"
-            value={formData.fullName}
-            onChange={handleChange}
-            placeholder="ادخل اسمك الرباعي"
-            required
-            fullWidth
-            className={classes.textField}
-            variant="outlined"
-          />
-        </Grid>
+    <Form values={initialData} onChange={handleChange}>
+      <Box sx={{ p: 2, bgcolor: '#F5F7FF', borderRadius: 2 }}>
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <Typography className={classes.inputLabel}>
+              الاسم رباعي
+            </Typography>
+            <Input
+              name="fullName"
+              label=""
+              placeholder="ادخل اسمك الرباعي"
+              validation={{ arabic: 'يجب إدخال حروف عربية فقط' }}
+              variant="outlined"
+              fullWidth
+            />
+          </Grid>
 
-        <Grid item xs={12} md={4}>
-          <Typography className={classes.inputLabel}>
-            تاريخ الميلاد
-          </Typography>
-          <TextField
-            name="birthDate"
-            value={formData.birthDate}
-            onChange={handleChange}
-            type="date"
-            required
-            fullWidth
-            className={classes.textField}
-            InputLabelProps={{ shrink: true }}
-          />
-        </Grid>
+          <Grid item xs={12} md={4}>
+            <Typography className={classes.inputLabel}>
+              تاريخ الميلاد
+            </Typography>
 
-        <Grid item xs={12} md={4}>
-          <Typography className={classes.inputLabel}>
-            رقم الاثبات
-          </Typography>
-          <TextField
-            name="idNumber"
-            value={formData.idNumber}
-            onChange={handleChange}
-            placeholder="ادخل رقم الاثبات"
-            required
-            fullWidth
-            className={classes.textField}
-          />
-        </Grid>
+            <DatePicker
+              name="birthDate"
+              label=""
+              viewFormat={"DD / MM / YYYY"}
+              validation={{}}
+              variant="outlined"
+              fullWidth
+            />
+          </Grid>
 
-        <Grid item xs={12} md={4}>
-          <Typography className={classes.inputLabel}>
-            رقم الجوال
-          </Typography>
-          <TextField
-            name="mobile"
-            value={formData.mobile}
-            onChange={handleChange}
-            placeholder="ادخل رقم الجوال"
-            required
-            fullWidth
-            className={classes.textField}
-          />
-        </Grid>
+          <Grid item xs={12} md={4}>
+            <Typography className={classes.inputLabel}>
+              رقم الاثبات
+            </Typography>
+            <Input
+              name="idNumber"
+              label=""
+              placeholder="ادخل رقم الاثبات"
+              validation={{ number: 'يجب إدخال أرقام فقط' }}
+              variant="outlined"
+              fullWidth
+            />
+          </Grid>
 
-        <Grid item xs={12} md={4}>
-          <Typography className={classes.inputLabel}>
-            البريد الالكتروني
-          </Typography>
-          <TextField
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            type="email"
-            placeholder="ادخل البريد الالكتروني"
-            required
-            fullWidth
-            className={classes.textField}
-          />
-        </Grid>
+          <Grid item xs={12} md={4}>
+            <Typography className={classes.inputLabel}>
+              رقم الجوال
+            </Typography>
+            <Input
+              name="mobile"
+              label=""
+              placeholder="ادخل رقم الجوال"
+              validation={{ number: 'يجب إدخال أرقام فقط' }}
+              variant="outlined"
+              fullWidth
+            />
+          </Grid>
 
-        <Grid item xs={12} md={4}>
-          <Typography className={classes.inputLabel}>
-            الجنس
-          </Typography>
-          <FormControl fullWidth>
+          <Grid item xs={12} md={4}>
+            <Typography className={classes.inputLabel}>
+              البريد الإلكتروني
+            </Typography>
+            <Input
+              name="email"
+              label=""
+              placeholder="ادخل البريد الإلكتروني"
+              validation={{ english: 'يجب إدخال حروف إنجليزية فقط' }}
+              variant="outlined"
+              fullWidth
+            />
+          </Grid>
+
+          <Grid item xs={12} md={4}>
+            <Typography className={classes.inputLabel}>
+              الجنس
+            </Typography>
             <Select
               name="gender"
-              value={formData.gender}
-              onChange={handleChange}
-              className={`${classes.textField} ${classes.select}`}
-              displayEmpty
-            >
-              <MenuItem value="" disabled>اختر الجنس</MenuItem>
-              {genderData.map((gender) => (
-                <MenuItem key={gender.GENDER_ID} value={gender.GENDER_NAME}>{gender.GENDER_NAME}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Grid>
+              label=" "
+              validation={{}}
+              variant="outlined"
+              fullWidth
+              staticData={genderData}
+              // getOptionLabel={(option) => option?.label || ''}
+              // getOptionValue={(option) => option?.value || ''}
+              customKey='GENDER_ID'
+              customName='GENDER_NAME'
+            />
+          </Grid>
 
-        <Grid item xs={12} md={4}>
-          <Typography className={classes.inputLabel}>
-            الحالة الصحية
-          </Typography>
-          <FormControl fullWidth>
+          <Grid item xs={12} md={4}>
+            <Typography className={classes.inputLabel}>
+              الحالة الصحية
+            </Typography>
             <Select
               name="healthStatus"
-              value={formData.healthStatus}
-              onChange={handleChange}
-              className={`${classes.textField} ${classes.select}`}
-              displayEmpty
-            >
-              <MenuItem value="" disabled>اختر الحالة الصحية</MenuItem>
-              {healthStatusData.map((status) => (
-                <MenuItem key={status.HEALTH_STATUS_ID} value={status.HEALTH_STATUS_NAME}>{status.HEALTH_STATUS_NAME}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+              label=" "
+              validation={{}}
+              variant="outlined"
+              fullWidth
+              staticData={healthStatusData}
+              getOptionLabel={(option) => option?.label || ''}
+              getOptionValue={(option) => option?.value || ''}
+              customKey='HEALTH_STATUS_ID'
+              customName='HEALTH_STATUS_NAME'
+            />
+          </Grid>
         </Grid>
-      </Grid>
-    </Box>
+      </Box>
+    </Form>
   );
 }
