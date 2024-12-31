@@ -12,12 +12,10 @@ const useStyles = makeStyles()((theme) => ({
   }
 }));
 
-export default function PersonalInfoTab({ onUpdate, initialData = {} }) {
+export default function PersonalInfoTab({ formData, updateFormData }) {
   const { classes } = useStyles();
   const [genderData, setGenderData] = useState([]);
   const [healthStatusData, setHealthStatusData] = useState([]);
-  console.log(genderData);
-  
 
   useEffect(() => {
     Request({
@@ -48,11 +46,11 @@ export default function PersonalInfoTab({ onUpdate, initialData = {} }) {
   }, []);
 
   const handleChange = (values) => {
-    onUpdate?.(values);
+    updateFormData?.(values);
   };
 
   return (
-    <Form values={initialData} onChange={handleChange}>
+    <Form values={formData} onChange={handleChange}>
       <Box sx={{ p: 2, bgcolor: '#F5F7FF', borderRadius: 2 }}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
@@ -65,6 +63,7 @@ export default function PersonalInfoTab({ onUpdate, initialData = {} }) {
               placeholder="ادخل اسمك الرباعي"
               validation={{ arabic: 'يجب إدخال حروف عربية فقط' }}
               variant="outlined"
+              value={formData?.fullName || ''}
               fullWidth
             />
           </Grid>
@@ -73,13 +72,13 @@ export default function PersonalInfoTab({ onUpdate, initialData = {} }) {
             <Typography className={classes.inputLabel}>
               تاريخ الميلاد
             </Typography>
-
             <DatePicker
               name="birthDate"
               label=""
               viewFormat={"DD / MM / YYYY"}
               validation={{}}
               variant="outlined"
+              value={formData?.birthDate || null}
               fullWidth
             />
           </Grid>
@@ -94,6 +93,7 @@ export default function PersonalInfoTab({ onUpdate, initialData = {} }) {
               placeholder="ادخل رقم الاثبات"
               validation={{ number: 'يجب إدخال أرقام فقط' }}
               variant="outlined"
+              value={formData?.idNumber || ''}
               fullWidth
             />
           </Grid>
@@ -108,6 +108,7 @@ export default function PersonalInfoTab({ onUpdate, initialData = {} }) {
               placeholder="ادخل رقم الجوال"
               validation={{ number: 'يجب إدخال أرقام فقط' }}
               variant="outlined"
+              value={formData?.mobile || ''}
               fullWidth
             />
           </Grid>
@@ -122,6 +123,7 @@ export default function PersonalInfoTab({ onUpdate, initialData = {} }) {
               placeholder="ادخل البريد الإلكتروني"
               validation={{ english: 'يجب إدخال حروف إنجليزية فقط' }}
               variant="outlined"
+              value={formData?.email || ''}
               fullWidth
             />
           </Grid>
@@ -137,10 +139,9 @@ export default function PersonalInfoTab({ onUpdate, initialData = {} }) {
               variant="outlined"
               fullWidth
               staticData={genderData}
-              // getOptionLabel={(option) => option?.label || ''}
-              // getOptionValue={(option) => option?.value || ''}
               customKey='GENDER_ID'
               customName='GENDER_NAME'
+              value={formData?.gender || ''}
             />
           </Grid>
 
@@ -155,10 +156,9 @@ export default function PersonalInfoTab({ onUpdate, initialData = {} }) {
               variant="outlined"
               fullWidth
               staticData={healthStatusData}
-              getOptionLabel={(option) => option?.label || ''}
-              getOptionValue={(option) => option?.value || ''}
               customKey='HEALTH_STATUS_ID'
               customName='HEALTH_STATUS_NAME'
+              value={formData?.healthStatus || ''}
             />
           </Grid>
         </Grid>

@@ -45,6 +45,7 @@ const PrcAvailableJobDataSelAny = () => {
     
     // Only pass the necessary data
     const jobData = {
+      AVAILABLE_JOB_ID: rowData.AVAILABLE_JOB_ID,
       jobTitle: rowData.JOB_DESCRIPTION,
       workplace: rowData.WORKPLACE,
       skillName: rowData.SKILL_NAME,

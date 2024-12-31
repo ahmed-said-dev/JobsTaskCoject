@@ -12,7 +12,7 @@ const useStyles = makeStyles()((theme) => ({
   }
 }));
 
-export default function JobInfoTab({ onUpdate, initialData = {} }) {
+export default function JobInfoTab({ formData, updateFormData }) {
   const { classes } = useStyles();
   const [qualificationData, setQualificationData] = useState([]);
   const [specializationData, setSpecializationData] = useState([]);
@@ -60,11 +60,11 @@ export default function JobInfoTab({ onUpdate, initialData = {} }) {
   }, []);
 
   const handleChange = (values) => {
-    onUpdate?.(values);
+    updateFormData?.(values);
   };
 
   return (
-    <Form values={initialData} onChange={handleChange}>
+    <Form values={formData} onChange={handleChange}>
       <Box sx={{ p: 2, bgcolor: '#F5F7FF', borderRadius: 2 }}>
         <Grid container spacing={3}>
           <Grid item xs={12} md={4}>
@@ -78,8 +78,6 @@ export default function JobInfoTab({ onUpdate, initialData = {} }) {
               variant="outlined"
               fullWidth
               staticData={qualificationData}
-              getOptionLabel={(option) => option?.label || ''}
-              getOptionValue={(option) => option?.value || ''}
               customKey='ACADEMIC_QUALIFICATION_ID'
               customName='ACADEMIC_QUALIFICATION_NAME'
             />
@@ -139,8 +137,6 @@ export default function JobInfoTab({ onUpdate, initialData = {} }) {
               variant="outlined"
               fullWidth
               staticData={specializationData}
-              getOptionLabel={(option) => option?.label || ''}
-              getOptionValue={(option) => option?.value || ''}
               customKey='SPECIALIZATION_ID'
               customName='SPECIALIZATION_NAME'
             />
@@ -157,8 +153,6 @@ export default function JobInfoTab({ onUpdate, initialData = {} }) {
               variant="outlined"
               fullWidth
               staticData={estimateData}
-              getOptionLabel={(option) => option?.label || ''}
-              getOptionValue={(option) => option?.value || ''}
               customKey='ESTIMATE_ID'
               customName='ESTIMATE_NAME'
             />
@@ -166,13 +160,15 @@ export default function JobInfoTab({ onUpdate, initialData = {} }) {
 
           <Grid item xs={12}>
             <Typography className={classes.inputLabel}>
-              المرفقات
+              المؤهل العلمي
             </Typography>
             <Upload
-              name="attachments"
-              imagePath="file"
+              name="qualificationFile"
+              label=""
               validation={{ required: true }}
-              multiple
+              variant="outlined"
+              fullWidth
+              accept="application/pdf"
             />
           </Grid>
         </Grid>

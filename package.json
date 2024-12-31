@@ -13,10 +13,11 @@
     "http": "set BROWSER=none&&set HTTPS=false&&set PORT=$PORT_NUMBER$&&vite --host aseer.aait.com.sa --port $PORT_NUMBER$"
   },
   "dependencies": {
-    "@emotion/react": "^11.11.4",
-    "@emotion/styled": "^11.11.5",
-    "@mui/icons-material": "^5.16.11",
-    "@mui/material": "^5.15.19",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mui/icons-material": "^5.16.12",
+    "@mui/lab": "^6.0.0-beta.21",
+    "@mui/material": "^5.16.12",
     "@mui/system": "^6.1.8",
     "@mui/x-data-grid": "^7.6.1",
     "@mui/x-date-pickers": "^7.23.1",
