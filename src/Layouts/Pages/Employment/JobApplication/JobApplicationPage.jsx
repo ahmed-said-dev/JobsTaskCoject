@@ -14,6 +14,7 @@ import axios from 'axios';
 import moment from 'moment';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useTranslation } from 'react-i18next';
 
 const useStyles = makeStyles()((theme) => ({
   root: {
@@ -134,6 +135,8 @@ export default function JobApplicationPage() {
   const [skills, setSkills] = useState([]);
 
   const [experienceModalOpen, setExperienceModalOpen] = useState(false);
+
+  const { t } = useTranslation(['HRMS']);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -302,7 +305,7 @@ export default function JobApplicationPage() {
   return (
     <Box className={classes.root}>
       <ToastContainer
-        position="top-center"
+        position="top-right"
         autoClose={3000}
         hideProgressBar={false}
         newestOnTop
@@ -331,10 +334,10 @@ export default function JobApplicationPage() {
                 }
               }}
             >
-              <Tab label="البيانات الشخصية" value="0" className={classes.tab} />
-              <Tab label="بيانات اخر مؤهل" value="1" className={classes.tab} />
-              <Tab label="بيانات الخبرات" value="2" className={classes.tab} />
-              <Tab label="المهارات" value="3" className={classes.tab} />
+              <Tab label={t('HRMS:personalInfo')} value="0" className={classes.tab} />
+              <Tab label={t('HRMS:lastQualification')} value="1" className={classes.tab} />
+              <Tab label={t('HRMS:experienceInfo')} value="2" className={classes.tab} />
+              <Tab label={t('HRMS:skills')} value="3" className={classes.tab} />
             </TabList>
           </Box>
 
@@ -343,12 +346,12 @@ export default function JobApplicationPage() {
               <Grid container spacing={3}>
                 <Grid item xs={12}>
                   <Typography className={classes.inputLabel}>
-                    الاسم رباعي
+                    {t('HRMS:fullName')}
                   </Typography>
                   <Input
                     name="fullName"
                     label=""
-                    placeholder="ادخل اسمك الرباعي"
+                    placeholder={t('HRMS:enterFullName')}
                     validation={{ arabic: 'يجب إدخال حروف عربية فقط' }}
                     variant="outlined"
                     value={formData.fullName}
@@ -359,10 +362,12 @@ export default function JobApplicationPage() {
 
                 <Grid item xs={12} md={4}>
                   <Typography className={classes.inputLabel}>
-                    تاريخ الميلاد
+                    {t('HRMS:birthDate')}
                   </Typography>
                   <DatePicker
                     name="birthDate"
+                    label={t('HRMS:selectBirthDate')}
+                    placeholder={t('HRMS:dateFormat')}
                     validation={{ required: true }}
                     variant="outlined"
                     onChange={(date) => setFormData({ ...formData, birthDate: date })}
@@ -372,12 +377,12 @@ export default function JobApplicationPage() {
 
                 <Grid item xs={12} md={4}>
                   <Typography className={classes.inputLabel}>
-                    رقم الاثبات
+                    {t('HRMS:idNumber')}
                   </Typography>
                   <Input
                     name="idNumber"
                     label=""
-                    placeholder="ادخل رقم الاثبات"
+                    placeholder={t('HRMS:enterIdNumber')}
                     validation={{ number: 'يجب إدخال أرقام فقط' }}
                     variant="outlined"
                     value={formData.idNumber}
@@ -388,12 +393,12 @@ export default function JobApplicationPage() {
 
                 <Grid item xs={12} md={4}>
                   <Typography className={classes.inputLabel}>
-                    رقم الجوال
+                    {t('HRMS:mobile')}
                   </Typography>
                   <Input
                     name="mobile"
                     label=""
-                    placeholder="ادخل رقم الجوال"
+                    placeholder={t('HRMS:enterMobile')}
                     validation={{ number: 'يجب إدخال أرقام فقط' }}
                     variant="outlined"
                     value={formData.mobile}
@@ -404,12 +409,12 @@ export default function JobApplicationPage() {
 
                 <Grid item xs={12} md={4}>
                   <Typography className={classes.inputLabel}>
-                    البريد الإلكتروني
+                    {t('HRMS:email')}
                   </Typography>
                   <Input
                     name="email"
                     label=""
-                    placeholder="ادخل البريد الإلكتروني"
+                    placeholder={t('HRMS:enterEmail')}
                     validation={{ 
                       email: 'يرجى إدخال بريد إلكتروني صحيح',
                       pattern: {
@@ -426,7 +431,7 @@ export default function JobApplicationPage() {
 
                 <Grid item xs={12} md={4}>
                   <Typography className={classes.inputLabel}>
-                    الجنس
+                    {t('HRMS:gender')}
                   </Typography>
                   <Select
                     name="gender"
@@ -449,7 +454,7 @@ export default function JobApplicationPage() {
 
                 <Grid item xs={12} md={4}>
                   <Typography className={classes.inputLabel}>
-                    الحالة الصحية
+                    {t('HRMS:healthStatus')}
                   </Typography>
                   <Select
                     name="healthStatus"
@@ -478,7 +483,7 @@ export default function JobApplicationPage() {
               <Grid container spacing={2}>
                 <Grid item xs={12} md={4}>
                   <Typography className={classes.inputLabel}>
-                    المؤهل
+                    {t('HRMS:qualification')}
                   </Typography>
                   <Select
                     name="qualification"
@@ -501,12 +506,12 @@ export default function JobApplicationPage() {
 
                 <Grid item xs={12} md={4}>
                   <Typography className={classes.inputLabel}>
-                    الجامعة
+                    {t('HRMS:university')}
                   </Typography>
                   <Input
                     name="university"
                     label=""
-                    placeholder="ادخل اسم الجامعة"
+                    placeholder={t('HRMS:enterUniversity')}
                     validation={{ required: '' }}
                     variant="outlined"
                     value={formData.university}
@@ -517,7 +522,7 @@ export default function JobApplicationPage() {
 
                 <Grid item xs={12} md={4}>
                   <Typography className={classes.inputLabel}>
-                    التخصص
+                    {t('HRMS:specialization')}
                   </Typography>
                   <Select
                     name="specialization"
@@ -540,7 +545,7 @@ export default function JobApplicationPage() {
 
                 <Grid item xs={12} md={4}>
                   <Typography className={classes.inputLabel}>
-                    التقدير
+                    {t('HRMS:estimate')}
                   </Typography>
                   <Select
                     name="estimate"
@@ -563,12 +568,12 @@ export default function JobApplicationPage() {
 
                 <Grid item xs={12} md={4}>
                   <Typography className={classes.inputLabel}>
-                    سنة التخرج
+                    {t('HRMS:graduationYear')}
                   </Typography>
                   <Input
                     name="graduationYear"
                     label=""
-                    placeholder="ادخل سنة التخرج"
+                    placeholder={t('HRMS:enterGraduationYear')}
                     validation={{ required: '' }}
                     variant="outlined"
                     value={formData.graduationYear}
@@ -579,12 +584,12 @@ export default function JobApplicationPage() {
 
                 <Grid item xs={12} md={4}>
                   <Typography className={classes.inputLabel}>
-                    البلد
+                    {t('HRMS:country')}
                   </Typography>
                   <Input
                     name="country"
                     label=""
-                    placeholder="ادخل البلد"
+                    placeholder={t('HRMS:enterCountry')}
                     validation={{ required: '' }}
                     variant="outlined"
                     value={formData.country}
@@ -612,7 +617,7 @@ export default function JobApplicationPage() {
                   startIcon={<AddIcon />}
                   onClick={handleExperienceModalOpen}
                 >
-                  اضافة سجل جديد
+                  {t('HRMS:addNewRecord')}
                 </Button>
               </div>
 
@@ -620,12 +625,12 @@ export default function JobApplicationPage() {
                 <Table>
                   <TableHead>
                     <TableRow>
-                      <TableCell align="right">الخبرة</TableCell>
-                      <TableCell align="right">الوظيفة</TableCell>
-                      <TableCell align="right">المكان</TableCell>
-                      <TableCell align="right">تاريخ بداية العمل</TableCell>
-                      <TableCell align="right">تاريخ نهاية العمل</TableCell>
-                      <TableCell align="right">حذف</TableCell>
+                      <TableCell align="right">{t('HRMS:experience')}</TableCell>
+                      <TableCell align="right">{t('HRMS:job')}</TableCell>
+                      <TableCell align="right">{t('HRMS:location')}</TableCell>
+                      <TableCell align="right">{t('HRMS:startDate')}</TableCell>
+                      <TableCell align="right">{t('HRMS:endDate')}</TableCell>
+                      <TableCell align="right">{t('HRMS:delete')}</TableCell>
                     </TableRow>
                   </TableHead>
                   <tbody>
@@ -650,7 +655,7 @@ export default function JobApplicationPage() {
               <Modal open={experienceModalOpen} onClose={handleExperienceModalClose}>
                 <Box sx={modalStyle}>
                   <div className={classes.modalHeader}>
-                    <Typography variant="h6">اضافة سجل جديد</Typography>
+                    <Typography variant="h6">{t('HRMS:addNewRecord')}</Typography>
                     <IconButton onClick={handleExperienceModalClose}>
                       <CloseIcon />
                     </IconButton>
@@ -660,7 +665,7 @@ export default function JobApplicationPage() {
                     <Grid container spacing={3}>
                       <Grid item xs={12} md={6}>
                         <Typography className={classes.inputLabel}>
-                          الخبرة
+                          {t('HRMS:experience')}
                         </Typography>
                         <Select
                           name="experience"
@@ -683,12 +688,12 @@ export default function JobApplicationPage() {
 
                       <Grid item xs={12} md={6}>
                         <Typography className={classes.inputLabel}>
-                          الوظيفة
+                          {t('HRMS:job')}
                         </Typography>
                         <Input
                           name="job"
                           label=""
-                          placeholder="ادخل الوظيفة"
+                          placeholder={t('HRMS:enterJob')}
                           validation={{ required: '' }}
                           variant="outlined"
                           fullWidth
@@ -699,12 +704,12 @@ export default function JobApplicationPage() {
 
                       <Grid item xs={12} md={6}>
                         <Typography className={classes.inputLabel}>
-                          المكان
+                          {t('HRMS:location')}
                         </Typography>
                         <Input
                           name="location"
                           label=""
-                          placeholder="ادخل المكان"
+                          placeholder={t('HRMS:enterLocation')}
                           validation={{ required: '' }}
                           variant="outlined"
                           fullWidth
@@ -715,10 +720,12 @@ export default function JobApplicationPage() {
 
                       <Grid item xs={12} md={6}>
                         <Typography className={classes.inputLabel}>
-                          تاريخ بداية العمل
+                          {t('HRMS:startDate')}
                         </Typography>
                         <DatePicker
                           name="startDate"
+                          label={t('HRMS:selectStartDate')}
+                          placeholder={t('HRMS:dateFormat')}
                           viewFormat={"DD / MM / YYYY"}
                           actionFormat={"DD/MM/YYYY"}
                           validation={{ required: '' }}
@@ -731,10 +738,12 @@ export default function JobApplicationPage() {
 
                       <Grid item xs={12} md={6}>
                         <Typography className={classes.inputLabel}>
-                          تاريخ نهاية العمل
+                          {t('HRMS:endDate')}
                         </Typography>
                         <DatePicker
                           name="endDate"
+                          label={t('HRMS:selectEndDate')}
+                          placeholder={t('HRMS:dateFormat')}
                           viewFormat={"DD / MM / YYYY"}
                           actionFormat={"DD/MM/YYYY"}
                           validation={{ required: '' }}
@@ -757,7 +766,7 @@ export default function JobApplicationPage() {
                           }
                         }}
                       >
-                        حفظ
+                        {t('HRMS:save')}
                       </Button>
                       <Button
                         variant="outlined"
@@ -771,7 +780,7 @@ export default function JobApplicationPage() {
                           }
                         }}
                       >
-                        إلغاء
+                        {t('HRMS:cancel')}
                       </Button>
                     </div>
                   </Form>
@@ -785,7 +794,7 @@ export default function JobApplicationPage() {
               <Grid item xs={12}>
                 <Select
                   name="selectedSkills"
-                  label="المهارات"
+                  label={t('HRMS:skills')}
                   multiple
                   validation={{ required: '' }}
                   variant="outlined"
@@ -813,14 +822,14 @@ export default function JobApplicationPage() {
             onClick={handleSubmit}
             className={classes.submitButton}
           >
-            إرسال الطلب
+            {t('HRMS:sendRequest')}
           </Button>
           <Button
             variant="outlined"
             onClick={handleCancel}
             className={classes.cancelButton}
           >
-            إلغاء
+            {t('HRMS:cancel')}
           </Button>
         </Box>
       </Form>

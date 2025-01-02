@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import {  Grid, Page, Request } from 'coject';
 import { Box, Paper } from '@mui/material';
 import { useStyles } from 'tss-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { Store } from "../../../Services/Stores";
 
 const PrcAvailableJobDataSelAny = () => {
   const [jobs, setJobs] = useState([]);
   const { classes } = useStyles();
   const { t } = useTranslation(['HRMS']);
   const navigate = useNavigate();
-
-  // const gridDataSource = 
+  const { gridLocaleText } = useContext(Store);
 
   useEffect(() => {
     Request({
@@ -31,19 +31,16 @@ const PrcAvailableJobDataSelAny = () => {
   }, []);
 
   const gridColumns = [
-    { field: 'WORKPLACE', headerName: "Workplace", flex: 1 },
-    { field: 'AGE', headerName: "Age", flex: 1 },
-    { field: 'SALARY', headerName: "Salary", flex: 1 },
-    { field: 'IS_ACTIVE_Y_N', headerName: "Vacancy", flex: 1 },
-    { field: 'SKILL_NAME', headerName: "Skill Name", flex: 1 },
-    { field: 'EXPERIENCE_NAME', headerName: "Experience Name", flex: 1 },
-    { field: 'ACADEMIC_QUALIFICATION_NAME', headerName: "Academic Qualification Name", flex: 1 },
+    { field: 'WORKPLACE', headerName: t('HRMS:workplace'), flex: 1, align: 'right', headerAlign: 'right' },
+    { field: 'AGE', headerName: t('HRMS:age'), flex: 1, align: 'right', headerAlign: 'right' },
+    { field: 'SALARY', headerName: t('HRMS:salary'), flex: 1, align: 'right', headerAlign: 'right' },
+    { field: 'IS_ACTIVE_Y_N', headerName: t('HRMS:vacancy'), flex: 1, align: 'right', headerAlign: 'right' },
+    { field: 'SKILL_NAME', headerName: t('HRMS:skillName'), flex: 1, align: 'right', headerAlign: 'right' },
+    { field: 'EXPERIENCE_NAME', headerName: t('HRMS:experienceName'), flex: 1, align: 'right', headerAlign: 'right' },
+    { field: 'ACADEMIC_QUALIFICATION_NAME', headerName: t('HRMS:academicQualification'), flex: 1, align: 'right', headerAlign: 'right' },
   ];
 
   const handleApplyJob = (rowData) => {
-    console.log(rowData);
-    
-    // Only pass the necessary data
     const jobData = {
       AVAILABLE_JOB_ID: rowData.AVAILABLE_JOB_ID,
       jobTitle: rowData.JOB_DESCRIPTION,
@@ -53,32 +50,30 @@ const PrcAvailableJobDataSelAny = () => {
       academicQualification: rowData.ACADEMIC_QUALIFICATION_NAME
     };
 
-    // Navigate to the job application page with minimal job data
     navigate('/employment/job-application', { 
       state: jobData
     });
   };
 
-  console.log(jobs);
-  
- 
   return (
-    <Page title={"Available Job Data"}>
+    <Page title={t('HRMS:availableJobs')}>
       <Box className={classes.root}>
         <Paper elevation={1} sx={{ p: 2 }}>
           <Grid
             staticData={jobs}
             schema={gridColumns}
             customKey="ACADEMIC_QUALIFICATION_NAME"
+            localeText={gridLocaleText}
+            store={Store}
             customActions={[
             {
               icon: "RemoveRedEye", 
-              label: "عرض الوظيفة", 
+              label: t('HRMS:viewJob'), 
               onClick: (row) => handleApplyJob(row)
             },
             {
               icon: "AppRegistration", 
-              label: "Apply", 
+              label: t('HRMS:applyJob'), 
               onClick: (_,row) => handleApplyJob(row)
             },
           ]}
