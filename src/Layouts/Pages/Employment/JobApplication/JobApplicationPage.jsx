@@ -10,6 +10,10 @@ import { Request, Input, Select, Upload, Form, DatePicker, Icons } from 'coject'
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 import LocationOn from '@mui/icons-material/LocationOn';
+import axios from 'axios';
+import moment from 'moment';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const useStyles = makeStyles()((theme) => ({
   root: {
@@ -175,75 +179,83 @@ export default function JobApplicationPage() {
     setValue(newValue);
   };
 
-  const handleSubmit = () => {
-    if (!formData.availableJobId) {
-      alert('خطأ في بيانات الوظيفة. الرجاء المحاولة مرة أخرى');
-      return;
-    }
+  const handleSubmit = async () => {
+    try {
+      if (!formData.availableJobId) {
+        alert('خطأ في بيانات الوظيفة. الرجاء المحاولة مرة أخرى');
+        return;
+      }
 
-    if (!formData.birthDate) {
-      alert('الرجاء إدخال تاريخ الميلاد');
-      return;
-    }
+      if (!formData.birthDate) {
+        alert('الرجاء إدخال تاريخ الميلاد');
+        return;
+      }
 
-    const formatDate = (date) => {
-      try {
-        if (!date) {
+      const formatDate = (date) => {
+        try {
+          if (!date) {
+            return new Date().toISOString().split('T')[0];
+          }
+          const d = new Date(date);
+          if (isNaN(d.getTime())) {
+            return new Date().toISOString().split('T')[0];
+          }
+          return d.toISOString().split('T')[0];
+        } catch (error) {
+          console.error('Error formatting date:', error);
           return new Date().toISOString().split('T')[0];
         }
-        const d = new Date(date);
-        if (isNaN(d.getTime())) {
-          return new Date().toISOString().split('T')[0];
+      };
+
+      const formattedBirthDate = formatDate(formData.birthDate);
+
+      const apiData = {
+        ESTIMATE_ID: formData.estimate || null,
+        SPECIALIZATION_ID: formData.specialization || null,
+        AVAILABLE_JOB_ID: Number(formData.availableJobId),
+        APPLICANT_NAME: formData.fullName || '',
+        NATIONALID: Number(formData.idNumber) || null,
+        MOBILE: formData.mobile || '',
+        BIRTHDATE: formattedBirthDate,
+        EMAIL: formData.email || '',
+        GENDER_ID: formData.gender || null,
+        HEALTH_STATUS_ID: formData.healthStatus || null,
+        ACADEMIC_QUALIFICATION_ID: formData.qualification || null,
+        QUALIFICATION_COUNTRY: formData.country || 'SA',
+        UNIVERSITY: formData.university || '',
+        GRADUATION_YEAR: Number(formData.graduationYear) || null,
+        SKILL_ID: formData.selectedSkills ? formData.selectedSkills.join(',') : '',
+        PTOKEN: '902DBEAE47DE4EB2A471AA338165B66D'
+      };
+
+      const response = await axios.post('https://aseer.aait.com.sa:4801/API/C279486795214703A93A3DC417DB35E1/Hrms/Custom/PrcJobApplyDataIns', { TOKEN: '902DBEAE47DE4EB2A471AA338165B66D', ...apiData });
+      const PJOB_APPLY_ID = response.data.DATA.PJOB_APPLY_ID;
+
+      toast.success('تم إرسال طلب التوظيف بنجاح');
+
+      for (const experience of formData.tableData) {
+        try {
+          const startDate = experience.startDate ? moment(experience.startDate, "DD/MM/YYYY").format("YYYY-MM-DD") : null;
+          const endDate = experience.endDate ? moment(experience.endDate, "DD/MM/YYYY").format("YYYY-MM-DD") : null;
+
+          const experiencePayload = {
+            JOB_APPLY_ID: PJOB_APPLY_ID,
+            EXPERIENCE_ID: experience.experience,
+            WORKPLACE: experience.location,
+            JOB_TITLE: experience.job,
+            START_DATE: startDate,
+            END_DATE: endDate
+          };
+
+          await axios.post('https://aseer.aait.com.sa:4801/API/C279486795214703A93A3DC417DB35E1/Hrms/Custom/PrcJobApplyExperienceInsert', experiencePayload);
+          toast.success('تم إضافة الخبرة بنجاح');
+        } catch (error) {
+          toast.error(`خطأ في إضافة الخبرة: ${error.response?.data?.MESSAGE?.MESSAGE || 'حدث خطأ ما'}`);
         }
-        return d.toISOString().split('T')[0];
-      } catch (error) {
-        console.error('Error formatting date:', error);
-        return new Date().toISOString().split('T')[0];
       }
-    };
-
-    const formattedBirthDate = formatDate(formData.birthDate);
-
-    const apiData = {
-      ESTIMATE_ID: formData.estimate || null,
-      SPECIALIZATION_ID: formData.specialization || null,
-      AVAILABLE_JOB_ID: Number(formData.availableJobId),
-      APPLICANT_NAME: formData.fullName || '',
-      NATIONALID: Number(formData.idNumber) || null,
-      MOBILE: formData.mobile || '',
-      BIRTHDATE: formattedBirthDate,
-      EMAIL: formData.email || '',
-      GENDER_ID: formData.gender || null,
-      HEALTH_STATUS_ID: formData.healthStatus || null,
-      ACADEMIC_QUALIFICATION_ID: formData.qualification || null,
-      QUALIFICATION_COUNTRY: formData.country || 'SA',
-      UNIVERSITY: formData.university || '',
-      GRADUATION_YEAR: Number(formData.graduationYear) || null,
-      SKILL_ID: formData.selectedSkills ? formData.selectedSkills.join(',') : '',
-      PTOKEN: '902DBEAE47DE4EB2A471AA338165B66D'
-    };
-
-    Request({
-      dataSource: {
-        method: 'post',
-        dataPath: 'DATA.REF_ID',
-        apiUrl: '/PrcJobApplyDataIns',
-        baseUrl: "https://aseer.aait.com.sa:4801/API/C279486795214703A93A3DC417DB35E1/Hrms/Custom",
-      },
-      data: { TOKEN: '902DBEAE47DE4EB2A471AA338165B66D', ...apiData, },
-      callback: (response) => {
-        if (response && response.SUCCESS) {
-          alert('تم إرسال طلبك بنجاح');
-          navigate(-1);
-        } else {
-          alert('حدث خطأ أثناء إرسال الطلب. يرجى المحاولة مرة أخرى');
-        }
-      },
-      errorCallback: (error) => {
-        console.error('Error submitting application:', error);
-        alert('حدث خطأ أثناء إرسال الطلب. يرجى المحاولة مرة أخرى');
-      }
-    }).then();
+    } catch (error) {
+      toast.error(`خطأ في إرسال الطلب: ${error.response?.data?.MESSAGE?.MESSAGE || 'حدث خطأ ما'}`);
+    }
   };
 
   const handleCancel = () => {
@@ -289,6 +301,18 @@ export default function JobApplicationPage() {
 
   return (
     <Box className={classes.root}>
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
       <Box className={classes.header}>
         <Typography variant="h6" component="h1">
           التقديم علي الوظائف المتاحة ({jobTitle})
